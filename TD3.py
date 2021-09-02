@@ -123,8 +123,8 @@ class Agent():
                  layer2_size=512, batch_size=100, noise=0.1):
         self.gamma = gamma
         self.tau = tau
-        self.max_action = 10
-        self.min_action = -10
+        self.max_action = 100
+        self.min_action = -100
 
         self.batch_size = batch_size
         self.learn_step_cntr = 0
@@ -165,12 +165,8 @@ class Agent():
         self.update_network_parameters(tau=1)
 
     def choose_action(self, observation):
-        if self.time_step < self.warmup:
-            mu = T.tensor(np.random.normal(scale=self.noise,
-                                           size=(self.n_actions,)))
-        else:
-            state = T.tensor(observation, dtype=T.float).to(self.actor.device)
-            mu = self.actor.forward(state).to(self.actor.device)
+        state = T.tensor(observation, dtype=T.float).to(self.actor.device)
+        mu = self.actor.forward(state).to(self.actor.device)
         mu_prime = mu + T.tensor(np.random.normal(scale=self.noise),
                                  dtype=T.float).to(self.actor.device)
 

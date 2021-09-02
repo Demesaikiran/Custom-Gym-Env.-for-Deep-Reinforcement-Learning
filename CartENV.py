@@ -24,6 +24,7 @@ class System(gym.Env):
         # Set ENV. Constraints
         self.x_threshold = 2
         self.episode_limit = 0
+        self.max_steps = 500
 
         # Setting for Env. Verbose
         obs_limits = np.array(
@@ -74,6 +75,9 @@ class System(gym.Env):
         # Build State as Position, Velocity (a = F/m)
         x, x_dot = self.state
 
+        # Actual Torque Needed
+        u = 3 * (0 - x) + 1 * (0 - x_dot)
+
         # Exert Force(=action) on Mass
         xacc = action / self.masscart
 
@@ -87,24 +91,24 @@ class System(gym.Env):
             x = x + self.tau * x_dot
 
         # Revise the State
-        self.state = (x, x_dot)
+        self.state = np.array([x, x_dot])
 
         # Engg. Terminal Condition Reward Position
         if x < -self.x_threshold or x > self.x_threshold:
             done = True
-        elif self.episode_limit == 500:
+        elif self.episode_limit == self.max_steps:
             done = True
         else:
             done = False
 
         if not done:
-            reward = -np.linalg.norm(0 - x)
+            reward = -np.abs(u - action) * 1e2
             self.episode_limit += 1
-            return np.array(self.state, dtype=np.float32), reward, False
+            return self.state, reward, True
         else:
-            reward = -np.linalg.norm(0 - x)
+            reward = -np.abs(u - action) * 1e2
             self.episode_limit += 1
-            return np.array(self.state, dtype=np.float32), reward, True
+            return self.state, reward, True
 
     def reset(self):
         """

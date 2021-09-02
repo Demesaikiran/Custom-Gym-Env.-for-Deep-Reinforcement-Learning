@@ -13,7 +13,7 @@ agent = Agent(alpha=0.001, beta=0.001, tau=0.005,
               env=env, batch_size=128)
 
 # Init. & Start Training
-n_games = 2500
+n_games = 20000
 score_history = []
 avg_history = []
 best_score = env.reward_range[0]
@@ -42,11 +42,11 @@ for i in range(n_games):
     if avg_score > best_score:
         best_score = avg_score
         agent.save_models()
-        print(f'Episode:{i} \t ACC. Rewards: {score} \t AVG. Rewards: \
-                {avg_score:3.2f} \t *** MODEL SAVED! ***')
+        print(f'Episode:{i} \t ACC. Rewards: {score:3.2f} \t \
+              AVG. Rewards: {avg_score:3.2f} \t *** MODEL SAVED! ***')
     else:
-        print(f'Episode:{i} \t ACC. Rewards: {score} \t AVG. Rewards: \
-                {avg_score:3.2f}')
+        print(f'Episode:{i} \t ACC. Rewards: {score:3.2f} \t \
+              AVG. Rewards: {avg_score:3.2f}')
 
     # Save the Training data and Model Loss
     np.save('data/score_history', score_history, allow_pickle=False)
