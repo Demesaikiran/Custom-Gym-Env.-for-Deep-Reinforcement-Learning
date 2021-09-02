@@ -1,6 +1,6 @@
 # Custom Gym Environment for Deep Reinforcement Learning
 
-This repository implements method to build custom gym environments to train Deep Reinforcement Learning Agents.
+This repository implements a method to build custom gym environments to train Deep Reinforcement Learning Agents.
 
 ## Strategy
 
@@ -22,7 +22,7 @@ This repository implements method to build custom gym environments to train Deep
 Replace 'pip3' by 'pip' if 'pip' is installed.
 
 ```bash
-    pip3 install -r requirements.txt
+    $ pip3 install -r requirements.txt
 ```
 
 ## How to run?
@@ -32,7 +32,7 @@ Replace 'python3' with 'python' if system's Python version is < 3.0
 1. To Test
 
 ```bash
-    python3 test.py
+    $ python3 test.py
 ```
 
 2. To Train
@@ -40,19 +40,19 @@ Replace 'python3' with 'python' if system's Python version is < 3.0
     The [data](data) folder already has trained agents. Training again will overwrite the trained agents.
 
 ```bash
-    python3 train.py
+    $ python3 train.py
 ```
 
 3. To Profile
 
 ```bash
-    python3 profile.py
+    $ python3 profile.py
 ```
 
 3. Test ENV. with random actions.
 
 ```bash
-    python3 dummy_run.py
+    $ python3 dummy_run.py
 ```
 
 ## Profile Analysis
