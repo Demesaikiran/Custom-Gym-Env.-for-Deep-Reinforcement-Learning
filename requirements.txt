@@ -1,4 +1,4 @@
 torch
 numpy
-gym
+gym[all]
 matplotlib
