@@ -15,8 +15,8 @@ force_log = np.load('data/force_log.npy', allow_pickle=False)
 
 # Generate graphs
 plt.figure(1)
-plt.plot(sum_train, alpha=0.25, label='Sum. Rewards')
 plt.plot(avg_train, label='AVG. Rewards')
+plt.plot(sum_train, alpha=0.25, label='Sum. Rewards')
 plt.grid(True)
 plt.xlabel('Training Episodes')
 plt.ylabel('Rewards')

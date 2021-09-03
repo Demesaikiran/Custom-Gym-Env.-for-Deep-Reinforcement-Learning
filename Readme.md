@@ -25,6 +25,14 @@ Replace 'pip3' by 'pip' if 'pip' is installed.
     $ pip3 install -r requirements.txt
 ```
 
+If installation fails. Install gym from source.
+
+```bash
+    $ git clone https://github.com/openai/gym
+    $ cd gym
+    $ pip install -e .
+```
+
 ## How to run?
 
 Replace 'python3' with 'python' if system's Python version is < 3.0
@@ -67,6 +75,6 @@ Replace 'python3' with 'python' if system's Python version is < 3.0
 2. Email: navalekanishk@gmail.com
 3. Website: https://kanishknavale.github.io/
 
-## TODO
+## Note
 
-1. Add Code Documentation.
+1. Project is developed in Ubuntu 20.04 system.

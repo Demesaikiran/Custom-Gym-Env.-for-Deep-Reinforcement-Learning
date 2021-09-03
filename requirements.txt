@@ -1,7 +1,7 @@
 wheel
 torch
 numpy
-gym[all]
+gym
 matplotlib
 pyglet
 PyOpenGL
