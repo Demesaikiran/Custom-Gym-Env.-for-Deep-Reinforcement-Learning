@@ -68,6 +68,8 @@ Replace 'python3' with 'python' if system's Python version is < 3.0
 |Agent Policy Training|Testing Agent|
 |:--:|:--:|
 |<img src='data/Agent Training Profile.png'>|<img src='data/Agent Testing Profile.png'>|
+|Untrained Agent|Trained Agent|
+|<img src='data/untrained.gif'>|<img src='data/trained.gif'>|
 
 ## Developer
 
