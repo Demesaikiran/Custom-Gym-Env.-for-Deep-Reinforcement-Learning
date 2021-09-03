@@ -31,11 +31,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Clean install gym
-      git clone https://github.com/openai/gym
-      cd gym
-      pip install -e .
-
       # Check the test.py
       - name: Run Check
         run: python test.py
