@@ -72,13 +72,13 @@ class System(gym.Env):
             ([np.float32]): Reward as norm distance from '0' state
             ([np.bool: ENV]). Terminal condition.
         """
-        # Build State as Position, Velocity (a = F/m)
+        # Build State as Position, Velocity
         x, x_dot = self.state
 
-        # Actual Torque Needed
-        u = 3 * (0 - x) + 1 * (0 - x_dot)
+        # Actual Torque Needed using PID
+        u = 5 * (0. - x) + 4.5 * (0. - x_dot)
 
-        # Exert Force(=action) on Mass
+        # Exert Force(Acc. = action/ Mass) on Mass
         xacc = action / self.masscart
 
         # Solve Control System
@@ -102,13 +102,13 @@ class System(gym.Env):
             done = False
 
         if not done:
-            reward = -np.abs(u - action) * 1e2
+            reward = -np.abs(u - action)
             self.episode_limit += 1
-            return self.state, reward, True
+            return self.state, reward, done
         else:
-            reward = -np.abs(u - action) * 1e2
+            reward = -np.abs(u - action)
             self.episode_limit += 1
-            return self.state, reward, True
+            return self.state, reward, done
 
     def reset(self):
         """

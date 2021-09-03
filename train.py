@@ -13,7 +13,7 @@ agent = Agent(alpha=0.001, beta=0.001, tau=0.005,
               env=env, batch_size=128)
 
 # Init. & Start Training
-n_games = 20000
+n_games = 2500
 score_history = []
 avg_history = []
 best_score = env.reward_range[0]
@@ -25,12 +25,14 @@ for i in range(n_games):
 
     # Initial Reset of Environment
     observation = env.reset()
-    while not done:
+    for j in range(env.max_steps):
         action = agent.choose_action(observation)
         observation_, reward, done, = env.step(action)
         agent.remember(observation, action, reward, observation_, done)
         observation = observation_
         score += reward
+        if done:
+            break
 
     # Optimize the Agent
     agent.optimize()
