@@ -25,6 +25,13 @@ jobs:
           flake8 .
         continue-on-error: true
 
+      # Install Gym
+      - name: Install Gym from Source
+        run: |
+          git clone https://github.com/openai/gym
+          cd gym
+          pip install -e .
+
       # Install dependencies
       - name: Install dependencies
         run: |
