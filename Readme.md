@@ -69,7 +69,7 @@ Replace 'python3' with 'python' if system's Python version is < 3.0
 |:--:|:--:|
 |<img src='data/Agent Training Profile.png'>|<img src='data/Agent Testing Profile.png'>|
 |Untrained Agent|Trained Agent|
-|<img src='data/untrained.gif'>|<img src='data/trained.gif'>|
+|<img src='data/untrained.gif' width="600">|<img src='data/trained.gif' width="600">|
 
 ## Developer
 
