@@ -9,6 +9,15 @@ import os
 class ReplayBuffer:
     """Defines the Buffer dataset from which the agent learns"""
     def __init__(self, max_size, input_shape, dim_actions):
+        """
+        Description,
+        Initializes matrices as dataframes.
+
+        Args:
+            max_size ([int]): Max Size of the Buffer.
+            input_shape ([type]): Observation Shape
+            dim_actions ([type]): Dimension of action
+        """
         self.mem_size = max_size
         self.mem_cntr = 0
         self.state_memory = np.zeros((self.mem_size, input_shape),
@@ -21,6 +30,17 @@ class ReplayBuffer:
         self.terminal_memory = np.zeros(self.mem_size, dtype=np.bool)
 
     def store_transition(self, state, action, reward, new_state, done):
+        """
+        Description,
+            Adds experience to it's w.r.t matrices dataframes.
+
+        Args:
+            state ([np.array, type=np.float32, size=(2,)]): State
+            action ([int]): action
+            reward ([np.float32]): reward
+            new_state ([np.array, type=np.float32, size=(2,)]): State
+            done ([bool]): Done Flag
+        """
         index = self.mem_cntr % self.mem_size
         self.state_memory[index] = state
         self.new_state_memory[index] = new_state
@@ -30,6 +50,20 @@ class ReplayBuffer:
         self.mem_cntr += 1
 
     def sample_buffer(self, batch_size):
+        """
+        Description,
+            Samples random batch of experiences from dataframe.
+
+        Args:
+            batch_size ([int]): No. of Experiences.
+
+        Returns:
+            states ([np.array, type=np.float32, size=(batch_size,2)]): State
+            actions ([int, size=(batch_size, 1)]): action
+            rewards ([np.float32, size=(batch_size, 1)]): reward
+            new_states ([np.array, type=np.float32, size=(batch_size,2)]): State
+            dones ([bool, size=(batch_size, 1)]): Done Flag
+        """
         max_mem = min(self.mem_cntr, self.mem_size)
         batch = np.random.choice(max_mem, batch_size, replace=False)
         states = self.state_memory[batch]
@@ -43,6 +77,19 @@ class ReplayBuffer:
 class CriticNetwork(nn.Module):
     def __init__(self, beta, input_dims, fc1_dims, fc2_dims, n_actions,
                  name, chkpt_dir='data/'):
+        """
+        Description,
+            Initializes Critic Network.
+
+        Args:
+            beta ([np.float32]): learning rate.
+            input_dims ([int]): state shape.
+            fc1_dims ([int]): Hidden Layer 1 dimension.
+            fc2_dims ([int]): Hidden Layer 2 dimension.
+            n_actions ([int]): action shape.
+            name ([str]): Name of the Network
+            chkpt_dir (str, optional): Data Directory. Defaults to 'data/'.
+        """
         super(CriticNetwork, self).__init__()
         self.input_dims = input_dims
         self.fc1_dims = fc1_dims
@@ -62,6 +109,17 @@ class CriticNetwork(nn.Module):
         self.to(self.device)
 
     def forward(self, state, action):
+        """
+        Description,
+            Solves the forward Propogation as per graph.
+
+        Args:
+            states ([np.array, type=np.float32, size=(batch_size,2)]): State
+            actions ([int, size=(batch_size, 1)]): action
+
+        Returns:
+            [np.float32]: Value.
+        """
         q1_action_value = self.fc1(T.cat([state, action], dim=1))
         q1_action_value = F.relu(q1_action_value)
         q1_action_value = self.fc2(q1_action_value)
@@ -72,15 +130,36 @@ class CriticNetwork(nn.Module):
         return q1
 
     def save_checkpoint(self):
+        """
+        Description,
+            Saves the model to the checkpoint directory.
+        """
         T.save(self.state_dict(), self.checkpoint_file)
 
     def load_checkpoint(self):
+        """
+        Description,
+            Loads the model from checkpoint directory.
+        """
         self.load_state_dict(T.load(self.checkpoint_file))
 
 
 class ActorNetwork(nn.Module):
     def __init__(self, alpha, input_dims, fc1_dims, fc2_dims,
                  n_actions, name, chkpt_dir='data/'):
+        """
+        Description,
+            Initializes Actor Network.
+
+        Args:
+            alpha ([np.float32]): learning rate.
+            input_dims ([int]): state shape.
+            fc1_dims ([int]): Hidden Layer 1 dimension.
+            fc2_dims ([int]): Hidden Layer 2 dimension.
+            n_actions ([int]): action shape.
+            name ([str]): Name of the Network
+            chkpt_dir (str, optional): Data Directory. Defaults to 'data/'.
+        """
         super(ActorNetwork, self).__init__()
         self.input_dims = input_dims
         self.fc1_dims = fc1_dims
@@ -100,6 +179,16 @@ class ActorNetwork(nn.Module):
         self.to(self.device)
 
     def forward(self, state):
+        """
+        Description,
+            Solves the forward Propogation as per graph.
+
+        Args:
+            states ([np.array, type=np.float32, size=(batch_size,2)]): State
+
+        Returns:
+            [np.float32]: force.
+        """
         prob = self.fc1(state)
         prob = F.relu(prob)
         prob = self.fc2(prob)
@@ -110,17 +199,43 @@ class ActorNetwork(nn.Module):
         return mu
 
     def save_checkpoint(self):
+        """
+        Description,
+            Saves the model to the checkpoint directory.
+        """
         T.save(self.state_dict(), self.checkpoint_file)
 
     def load_checkpoint(self):
+        """
+        Description,
+            Loads the model from checkpoint directory.
+        """
         self.load_state_dict(T.load(self.checkpoint_file))
 
 
 class Agent():
     def __init__(self, alpha, beta, tau, env,
-                 gamma=0.99, update_actor_interval=2, warmup=1000,
+                 gamma=0.99, update_actor_interval=2,
                  n_actions=2, max_size=1000000, layer1_size=512,
                  layer2_size=512, batch_size=100, noise=0.1):
+        """
+        Description,
+            Initializes  Agent.
+
+        Args:
+            alpha ([np.float32]): Learning rate of Actor.
+            beta ([np.float32]): Learning rate of Critic.
+            tau ([tau]): Weight transport rate.
+            env ([object]): Environment.
+            gamma (float, optional): Agent hyperparameter. Defaults to 0.99.
+            update_actor_interval (int, optional): Agent update Interval. Defaults to 2.
+            n_actions (int, optional): No. of actions. Defaults to 2.
+            max_size (int, optional): Size of Buffer. Defaults to 1000000.
+            layer1_size (int, optional): Hidden layer 1 Size. Defaults to 512.
+            layer2_size (int, optional): Hidden layer 2 Size. Defaults to 512.
+            batch_size (int, optional): Batch Size for optimization. Defaults to 100.
+            noise (float, optional): Noise. Defaults to 0.1.
+        """
         self.gamma = gamma
         self.tau = tau
         self.max_action = 100
@@ -129,7 +244,6 @@ class Agent():
         self.batch_size = batch_size
         self.learn_step_cntr = 0
         self.time_step = 0
-        self.warmup = warmup
         self.n_actions = n_actions
         self.update_actor_iter = update_actor_interval
         self.input_dims = env.observation_space.shape[0]
@@ -165,6 +279,16 @@ class Agent():
         self.update_network_parameters(tau=1)
 
     def choose_action(self, observation):
+        """
+        Description,
+            Computes action.
+
+        Args:
+            observation ([np.float32]): state
+
+        Returns:
+            [np.float]: optimal force.
+        """
         state = T.tensor(observation, dtype=T.float).to(self.actor.device)
         mu = self.actor.forward(state).to(self.actor.device)
         mu_prime = mu + T.tensor(np.random.normal(scale=self.noise),
@@ -176,9 +300,24 @@ class Agent():
         return mu_prime.cpu().detach().numpy()[0]
 
     def remember(self, state, action, reward, new_state, done):
+        """
+        Description,
+            Adds experience to it's w.r.t matrices dataframes.
+
+        Args:
+            state ([np.array, type=np.float32, size=(2,)]): State
+            action ([int]): action
+            reward ([np.float32]): reward
+            new_state ([np.array, type=np.float32, size=(2,)]): State
+            done ([bool]): Done Flag
+        """
         self.memory.store_transition(state, action, reward, new_state, done)
 
     def optimize(self):
+        """
+        Description,
+            Performs TD3 policy optimization step.
+        """
         if self.memory.mem_cntr < self.batch_size:
             return
 
@@ -238,6 +377,10 @@ class Agent():
         self.update_network_parameters()
 
     def update_network_parameters(self, tau=None):
+        """
+        Description,
+            Performs network updates as per TD3 Policy
+        """
         if tau is None:
             tau = self.tau
 
@@ -272,6 +415,10 @@ class Agent():
         self.target_actor.load_state_dict(actor)
 
     def save_models(self):
+        """
+        Description,
+            Save all the models into respective checkpoints.
+        """
         self.actor.save_checkpoint()
         self.target_actor.save_checkpoint()
         self.critic_1.save_checkpoint()
@@ -280,6 +427,10 @@ class Agent():
         self.target_critic_2.save_checkpoint()
 
     def load_models(self):
+        """
+        Description,
+            Loads all the model from respective checkpoints.
+        """
         self.actor.load_checkpoint()
         self.target_actor.load_checkpoint()
         self.critic_1.load_checkpoint()
