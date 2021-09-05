@@ -1,4 +1,5 @@
 cffi
+sympy
 Cython
 fasteners
 glfw
