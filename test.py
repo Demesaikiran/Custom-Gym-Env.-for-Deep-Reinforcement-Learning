@@ -74,15 +74,15 @@ if __name__ == '__main__':
 
     # Instantiate the parser
     parser = argparse.ArgumentParser()
-    parser.add_argument("--n_games", default=10)
+    parser.add_argument("--games", default=10)
     parser.add_argument("--render")
     args = parser.parse_args()
-    n_games = int(args.n_games)
+    games = int(args.games)
     if args.render == 'True':
         mode = True
     else:
         mode = False
 
     # Run the test
-    print(f'Testing Agent for: {n_games} games.')
-    test(n_games, mode)
+    print(f'Testing Agent for: {games} games.')
+    test(games, mode)

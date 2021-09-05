@@ -2,12 +2,15 @@
 
 This repository implements a method to build custom gym environments to train Deep Reinforcement Learning Agents.
 
+* The 'Policy Network' is referred as 'agent' or 'Agent' in this repository.
+
 ## Strategy
 
 1. Control 1D-Mass system around a set point.
 2. Engineered TD3 Agent using PyTorch to solve the environment.
 3. Agent to minimize use of force[u] to reach the set state [position, velocity].
 4. Reward Engineering is based on control system strategy.
+5. Torque can applied from the agent can be clipped for custom actuator sizing.
 
 ## Codebase Structure
 
@@ -26,20 +29,20 @@ This repository implements a method to build custom gym environments to train De
 ## How to run?
 
 1. To Test
-    * 'n_games' ([int]): No. of games to test the trained agent. Default is 10.
-    * 'render' ([bool]): If enabled renders the agent. Default is False.
+    * 'games' (int): No. of games to test the trained agent. Default is 10.
+    * 'render' (bool): If enabled renders the agent. Default is False.
 
 ```bash
-    $ python test.py --n_games 10 --render True
+    $ python test.py --games 10 --render True
 ```
 
 2. To Train
 
     * The [data](data) folder already has trained agents. Training again will overwrite the trained agents.
-    * 'n_games' ([int]): No. of games to train the agent. Default is 2500.
+    * 'games' (int): No. of games to train the agent. Default is 2500.
 
 ```bash
-    $ python train.py --n_games 2500
+    $ python train.py --games 2500
 ```
 
 3. To Profile
@@ -50,8 +53,8 @@ This repository implements a method to build custom gym environments to train De
 
 3. Test ENV. with random actions.
 
-    * 'render' ([bool]): If enabled renders the agent. Default is False.
-    
+    * 'render' (bool): If enabled renders the agent. Default is False.
+
 ```bash
     $ python dummy_run.py --render True
 ```

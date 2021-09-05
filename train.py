@@ -71,10 +71,10 @@ if __name__ == '__main__':
 
     # Instantiate the parser
     parser = argparse.ArgumentParser()
-    parser.add_argument("--n_games", default=2500)
+    parser.add_argument("--games", default=2500)
     args = parser.parse_args()
-    n_games = int(args.n_games)
+    games = int(args.games)
 
     # Run the test
-    print(f'Training Agent for: {n_games} games.')
-    train(n_games)
+    print(f'Training Agent for: {games} games.')
+    train(games)
