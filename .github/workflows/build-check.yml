@@ -25,19 +25,20 @@ jobs:
           flake8 .
         continue-on-error: true
 
-      # Install Gym
-      - name: Install Gym from Source
-        run: |
-          git clone https://github.com/openai/gym
-          cd gym
-          pip install -e .
-
       # Install dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Check the test.py
-      - name: Run Check
+      # Check for Simulator
+      - name: Run Simulator Check
         run: python dummy_run.py --render False
+
+      # Check for Training the Agent
+      - name: Run test.py Check
+        run: python train.py --n_games 10
+
+      # Check the Testing the Agent
+      - name: Run test.py Check
+        run: python test.py --n_games 10 --render False

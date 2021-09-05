@@ -26,17 +26,20 @@ This repository implements a method to build custom gym environments to train De
 ## How to run?
 
 1. To Test
+    * 'n_games' ([int]): No. of games to test the trained agent. Default is 10.
+    * 'render' ([bool]): If enabled renders the agent. Default is False.
 
 ```bash
-    $ python test.py
+    $ python test.py --n_games 10 --render True
 ```
 
 2. To Train
 
-    The [data](data) folder already has trained agents. Training again will overwrite the trained agents.
+    * The [data](data) folder already has trained agents. Training again will overwrite the trained agents.
+    * 'n_games' ([int]): No. of games to train the agent. Default is 2500.
 
 ```bash
-    $ python train.py
+    $ python train.py --n_games 2500
 ```
 
 3. To Profile
@@ -47,6 +50,8 @@ This repository implements a method to build custom gym environments to train De
 
 3. Test ENV. with random actions.
 
+    * 'render' ([bool]): If enabled renders the agent. Default is False.
+    
 ```bash
     $ python dummy_run.py --render True
 ```

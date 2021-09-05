@@ -2,6 +2,7 @@
 from CartENV import System
 from TD3 import Agent
 import numpy as np
+import argparse
 
 # Init. ENV.
 env = System()
@@ -15,42 +16,73 @@ agent = Agent(alpha=0.001, beta=0.001, tau=0.005,
 # Load Trained Weights
 agent.actor.load_checkpoint()
 
-# Init. & Start Training
-n_games = 10
-score_history = np.zeros(env.max_steps)
-force_history = np.zeros(env.max_steps)
-position_history = np.zeros(env.max_steps)
-avg_score = 0
 
-for i in range(n_games):
-    rewards = 0
+# Defintion for Trained Agent Testing
+def test(games, render):
+    """
+    Descrption,
+        Test's the trained agent in the environement.
 
-    # Initial Reset of Environment
-    observation = env.reset()
-    for j in range(env.max_steps):
-        # Render the ENV.
-        env.render()
+    Args:
+        games ([int]): No. of games to be tested.
+        render ([bool]): If enabled. Renders the enabled.
+    """
+    # Init. & Start Training
+    n_games = games
+    score_history = np.zeros(env.max_steps)
+    force_history = np.zeros(env.max_steps)
+    position_history = np.zeros(env.max_steps)
 
-        action = agent.choose_action(observation)
-        observation_, reward, done, = env.step(action)
-        observation = observation_
-        rewards += reward
-        score_history[j] += reward
-        force_history[j] += action
-        position_history[j] += observation[0]
+    for i in range(n_games):
+        rewards = 0
 
-    print(f'Done Profiling Test Episode: {i} \
-          with Accumulated Rewards: {rewards}')
+        # Initial Reset of Environment
+        observation = env.reset()
+        for j in range(env.max_steps):
+            # Render the ENV.
+            if render:
+                env.render()
 
-# Mean the Logs.
-score_history /= env.max_steps
-force_history /= env.max_steps
-position_history /= env.max_steps
+            action = agent.choose_action(observation)
+            observation_, reward, done, = env.step(action)
+            observation = observation_
+            rewards += reward
+            score_history[j] += reward
+            force_history[j] += action
+            position_history[j] += observation[0]
 
-# Save the Training data and Model Loss
-np.save('data/score_log', score_history, allow_pickle=False)
-np.save('data/force_log', force_history, allow_pickle=False)
-np.save('data/pos_log', position_history, allow_pickle=False)
+        print(f'Done Profiling Test Episode: {i} \
+            with Accumulated Rewards: {rewards}')
 
-# Close the ENV.
-env.close()
+    # Mean the Logs.
+    score_history /= env.max_steps
+    force_history /= env.max_steps
+    position_history /= env.max_steps
+
+    # Save the Training data and Model Loss
+    np.save('data/score_log', score_history, allow_pickle=False)
+    np.save('data/force_log', force_history, allow_pickle=False)
+    np.save('data/pos_log', position_history, allow_pickle=False)
+
+    # Close the ENV.
+    if render:
+        env.close()
+
+
+# Main Section
+if __name__ == '__main__':
+
+    # Instantiate the parser
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--n_games", default=10)
+    parser.add_argument("--render")
+    args = parser.parse_args()
+    n_games = int(args.n_games)
+    if args.render == 'True':
+        mode = True
+    else:
+        mode = False
+
+    # Run the test
+    print(f'Testing Agent for: {n_games} games.')
+    test(n_games, mode)

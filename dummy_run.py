@@ -1,5 +1,4 @@
 # Library Imports
-from sympy import N
 from CartENV import System
 import numpy as np
 import argparse
@@ -8,8 +7,15 @@ import argparse
 env = System()
 env.reset()
 
-
+# Defintion to Simulate the environment
 def simulate(mode):
+    """
+    Description,
+        Simulates environment with random actions.
+
+    Args:
+        mode ([bool]): If True, renders the environment.
+    """
     done = False
     render = mode
 
