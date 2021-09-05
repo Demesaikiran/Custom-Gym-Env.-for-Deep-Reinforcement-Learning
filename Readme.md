@@ -19,28 +19,16 @@ This repository implements a method to build custom gym environments to train De
 
 ## Install Prequisites
 
-Replace 'pip3' by 'pip' if 'pip' is installed.
-
 ```bash
-    $ pip3 install -r requirements.txt
-```
-
-If installation fails. Install gym from source.
-
-```bash
-    $ git clone https://github.com/openai/gym
-    $ cd gym
-    $ pip install -e .
+    $ pip install -r requirements.txt
 ```
 
 ## How to run?
 
-Replace 'python3' with 'python' if system's Python version is < 3.0
-
 1. To Test
 
 ```bash
-    $ python3 test.py
+    $ python test.py
 ```
 
 2. To Train
@@ -48,19 +36,19 @@ Replace 'python3' with 'python' if system's Python version is < 3.0
     The [data](data) folder already has trained agents. Training again will overwrite the trained agents.
 
 ```bash
-    $ python3 train.py
+    $ python train.py
 ```
 
 3. To Profile
 
 ```bash
-    $ python3 profile.py
+    $ python profile.py
 ```
 
 3. Test ENV. with random actions.
 
 ```bash
-    $ python3 dummy_run.py
+    $ python dummy_run.py --render True
 ```
 
 ## Profile Analysis
@@ -80,3 +68,4 @@ Replace 'python3' with 'python' if system's Python version is < 3.0
 ## Note
 
 1. Project is developed in Ubuntu 20.04 system.
+2. The python scripts is developed using 'Python 3.8.10' and 'pip3'.
