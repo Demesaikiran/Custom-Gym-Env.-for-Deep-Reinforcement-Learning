@@ -37,8 +37,8 @@ jobs:
 
       # Check for Training the Agent
       - name: Run test.py Check
-        run: python train.py --n_games 10
+        run: python train.py --games 10
 
       # Check the Testing the Agent
       - name: Run test.py Check
-        run: python test.py --n_games 10 --render False
+        run: python test.py --games 10 --render False
