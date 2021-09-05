@@ -40,4 +40,4 @@ jobs:
 
       # Check the test.py
       - name: Run Check
-        run: python test.py
+        run: python dummy_run.py --render False
