@@ -358,7 +358,7 @@ class Agent():
 
         q1_loss = F.mse_loss(target, q1)
         q2_loss = F.mse_loss(target, q2)
-        critic_loss = q1_loss + q2_loss
+        critic_loss = 0.5 * (q1_loss + q2_loss)
         critic_loss.backward()
         self.critic_1.optimizer.step()
         self.critic_2.optimizer.step()
