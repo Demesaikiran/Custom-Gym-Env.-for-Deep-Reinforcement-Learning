@@ -3,6 +3,7 @@ import gym
 from gym import spaces
 from gym.utils import seeding
 import numpy as np
+from scipy import linalg
 
 
 class System(gym.Env):
@@ -72,11 +73,24 @@ class System(gym.Env):
             ([np.float32]): Reward as norm distance from '0' state
             ([np.bool: ENV]). Terminal condition.
         """
+        # Set Point
+        set_point = np.array([0.0, 0.0])
+
         # Build State as Position, Velocity
         x, x_dot = self.state
 
+        # Optimum Torque using LQR
+        A = np.array([[0, 1], [0, 0]])
+        B = np.array([[0], [1 / self.masscart]])
+        Q = np.diag([1, 5])
+        R = 2
+        P = linalg.solve_continuous_are(A, B, Q, R)
+        K = -1 * (1 / R) * B.T @ P
+        u = -1 * K @ (set_point - self.state)
+        u = u[0]
+
         # Actual Torque Needed using PID
-        u = 5 * (0. - x) + 4.5 * (0. - x_dot)
+        # u = 5 * (0. - x) + 4.5 * (0. - x_dot)
 
         # Exert Force(Acc. = action/ Mass) on Mass
         xacc = action / self.masscart
