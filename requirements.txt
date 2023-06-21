@@ -7,9 +7,9 @@ imageio
 wheel
 torch
 numpy
-gym
+gym==0.21.0
 matplotlib
-pyglet
+pyglet==1.5.27
 PyOpenGL
 flake8
 scipy
