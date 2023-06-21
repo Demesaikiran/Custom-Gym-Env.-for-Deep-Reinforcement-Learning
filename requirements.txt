@@ -7,7 +7,7 @@ imageio
 wheel
 torch
 numpy
-gym
+gym==0.20.0
 matplotlib
 pyglet
 PyOpenGL
